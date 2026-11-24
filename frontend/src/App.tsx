@@ -1,15 +1,37 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import AppLayout from "./components/layout/AppLayout";
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import Products from "./pages/Products";
 import Register from "./pages/Register";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/register" replace />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={
+                sessionStorage.getItem("stockflow_access_token")
+                  ? "/dashboard"
+                  : "/login"
+              }
+              replace
+            />
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Navigate to="/register" replace />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

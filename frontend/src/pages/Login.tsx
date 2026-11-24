@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Link } from "react-router-dom";
-import { getAuthErrorMessage, login } from "../services/authService";
+import { Link, useNavigate } from "react-router-dom";
+import { getApiErrorMessage } from "../services/api";
+import { login } from "../services/authService";
 import "./Auth.css";
 
 function Login() {
@@ -9,20 +10,19 @@ function Login() {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setErrorMessage("");
-    setSuccessMessage("");
     setIsSubmitting(true);
 
     try {
       await login({ email: email.trim(), password });
-      setSuccessMessage("You’re signed in. Your access token is ready.");
+      navigate("/dashboard", { replace: true });
     } catch (error: unknown) {
       setErrorMessage(
-        getAuthErrorMessage(error, "Unable to sign in. Please try again."),
+        getApiErrorMessage(error, "Unable to sign in. Please try again."),
       );
     } finally {
       setIsSubmitting(false);
@@ -89,15 +89,6 @@ function Login() {
               {errorMessage}
             </p>
           )}
-          {successMessage && (
-            <p
-              className="registration-message registration-success"
-              role="status"
-            >
-              {successMessage}
-            </p>
-          )}
-
           <button
             className="registration-submit"
             type="submit"

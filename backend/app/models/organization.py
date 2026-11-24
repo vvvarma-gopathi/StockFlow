@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.dependencies.database import Base
 
 if TYPE_CHECKING:
+    from app.models.product import Product
     from app.models.user import User
 
 
@@ -29,6 +30,10 @@ class Organization(Base):
     )
 
     users: Mapped[list["User"]] = relationship(
+        back_populates="organization",
+        cascade="all, delete-orphan",
+    )
+    products: Mapped[list["Product"]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
     )

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ACCESS_TOKEN_STORAGE_KEY, api } from "./api";
 
 export interface SignupPayload {
@@ -40,28 +39,6 @@ export async function login(
   return response.data;
 }
 
-export function getAuthErrorMessage(error: unknown, fallback: string): string {
-  if (!axios.isAxiosError<{ detail?: unknown }>(error)) {
-    return fallback;
-  }
-
-  const detail = error.response?.data?.detail;
-  if (typeof detail === "string") {
-    return detail;
-  }
-  if (Array.isArray(detail)) {
-    const firstError = detail[0];
-    if (
-      typeof firstError === "object" &&
-      firstError !== null &&
-      "msg" in firstError &&
-      typeof firstError.msg === "string"
-    ) {
-      return firstError.msg;
-    }
-  }
-  if (!error.response) {
-    return "Unable to connect to StockFlow. Check your connection and try again.";
-  }
-  return fallback;
+export function logout(): void {
+  sessionStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
 }

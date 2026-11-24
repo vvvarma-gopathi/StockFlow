@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { getAuthErrorMessage, signup } from "../services/authService";
+import { getApiErrorMessage } from "../services/api";
+import { signup } from "../services/authService";
 import "./Auth.css";
 
 function Register() {
@@ -30,7 +31,10 @@ function Register() {
       );
     } catch (error: unknown) {
       setErrorMessage(
-        getAuthErrorMessage(error, "Unable to create your account. Please try again."),
+        getApiErrorMessage(
+          error,
+          "Unable to create your account. Please try again.",
+        ),
       );
     } finally {
       setIsSubmitting(false);
