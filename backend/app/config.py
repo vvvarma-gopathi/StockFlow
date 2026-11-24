@@ -10,7 +10,7 @@ FRONTEND_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         "FRONTEND_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
+        "http://localhost:5173,http://127.0.0.1:5173,https://frontend-liard-alpha-26.vercel.app/,https://stockflow-vishnuvardhangopathi-6448.vercel.app/",
     ).split(",")
     if origin.strip()
 ]
