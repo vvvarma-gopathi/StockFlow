@@ -169,3 +169,120 @@ def test_product_routes_require_authentication_and_reject_negative_values(client
         headers=headers,
     )
     assert invalid_product.status_code == 422
+
+
+def test_stock_adjustment_updates_quantity_and_records_history(client):
+    test_client, _ = client
+    headers = signup_and_get_headers(
+        client, "adjustment@example.com", "Adjustment Store"
+    )
+    created = test_client.post(
+        "/api/products",
+        json=product_data(quantity_on_hand=8),
+        headers=headers,
+    )
+    product_id = created.json()["id"]
+
+    adjustment = test_client.post(
+        f"/api/products/{product_id}/adjustments",
+        json={"quantity_delta": -3, "note": "Damaged during inspection"},
+        headers=headers,
+    )
+
+    assert adjustment.status_code == 201
+    assert adjustment.json()["quantity_delta"] == -3
+    assert adjustment.json()["previous_quantity"] == 8
+    assert adjustment.json()["quantity_after"] == 5
+    assert adjustment.json()["note"] == "Damaged during inspection"
+    assert adjustment.json()["adjusted_by_user_id"] is not None
+    restock = test_client.post(
+        f"/api/products/{product_id}/adjustments",
+        json={"quantity_delta": 2, "note": "Received returned stock"},
+        headers=headers,
+    )
+    assert restock.status_code == 201
+    assert restock.json()["quantity_after"] == 7
+    assert (
+        test_client.get("/api/products", headers=headers).json()[0][
+            "quantity_on_hand"
+        ]
+        == 7
+    )
+    history = test_client.get(
+        f"/api/products/{product_id}/adjustments",
+        headers=headers,
+    )
+    assert history.status_code == 200
+    assert [entry["id"] for entry in history.json()] == [
+        restock.json()["id"],
+        adjustment.json()["id"],
+    ]
+
+
+def test_stock_adjustment_rejects_zero_blank_note_and_negative_result(client):
+    test_client, _ = client
+    headers = signup_and_get_headers(
+        client, "adjustment-validation@example.com", "Adjustment Store"
+    )
+    created = test_client.post(
+        "/api/products",
+        json=product_data(quantity_on_hand=2),
+        headers=headers,
+    )
+    product_id = created.json()["id"]
+
+    assert test_client.post(
+        f"/api/products/{product_id}/adjustments",
+        json={"quantity_delta": 0, "note": "No change"},
+        headers=headers,
+    ).status_code == 422
+    assert test_client.post(
+        f"/api/products/{product_id}/adjustments",
+        json={"quantity_delta": 1, "note": "   "},
+        headers=headers,
+    ).status_code == 422
+
+    insufficient = test_client.post(
+        f"/api/products/{product_id}/adjustments",
+        json={"quantity_delta": -3, "note": "Correcting count"},
+        headers=headers,
+    )
+    assert insufficient.status_code == 409
+    assert test_client.get(
+        f"/api/products/{product_id}/adjustments",
+        headers=headers,
+    ).json() == []
+    assert test_client.get(
+        f"/api/products/{product_id}",
+        headers=headers,
+    ).json()["quantity_on_hand"] == 2
+
+
+def test_stock_adjustments_are_scoped_to_the_product_organization(client):
+    test_client, _ = client
+    owner_headers = signup_and_get_headers(
+        client, "adjustment-owner@example.com", "Owner Store"
+    )
+    other_headers = signup_and_get_headers(
+        client, "adjustment-other@example.com", "Other Store"
+    )
+    created = test_client.post(
+        "/api/products",
+        json=product_data(quantity_on_hand=5),
+        headers=owner_headers,
+    )
+    product_id = created.json()["id"]
+
+    assert test_client.post(
+        f"/api/products/{product_id}/adjustments",
+        json={"quantity_delta": -1, "note": "Unauthorized adjustment"},
+        headers=other_headers,
+    ).status_code == 404
+    assert test_client.get(
+        f"/api/products/{product_id}/adjustments",
+        headers=other_headers,
+    ).status_code == 404
+    assert test_client.get(
+        f"/api/products/{product_id}",
+        headers=owner_headers,
+    ).json()["quantity_on_hand"] == 5

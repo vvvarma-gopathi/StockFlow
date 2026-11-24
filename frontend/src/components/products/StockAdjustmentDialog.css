@@ -1,0 +1,244 @@
+.stock-adjustment-backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 29, 56, 0.46);
+}
+
+.stock-adjustment-dialog {
+  width: min(100%, 520px);
+  max-height: min(90vh, 760px);
+  overflow: auto;
+  border: 1px solid #e0e7f2;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(13, 30, 65, 0.24);
+}
+
+.stock-adjustment-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 23px 25px 17px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.stock-adjustment-eyebrow {
+  margin: 0 0 6px;
+  color: #2463eb;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1px;
+}
+
+.stock-adjustment-header h2 {
+  margin: 0;
+  color: #101c39;
+  font-size: 21px;
+  letter-spacing: -0.5px;
+}
+
+.stock-adjustment-product {
+  margin: 5px 0 0;
+  color: #71809a;
+  font-size: 12px;
+}
+
+.stock-adjustment-product span {
+  padding: 0 3px;
+  color: #aab4c4;
+}
+
+.stock-adjustment-close {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #71809a;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.stock-adjustment-close:hover {
+  background: #f1f4fa;
+}
+
+.stock-adjustment-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 25px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #f4f7fc;
+  color: #64728e;
+  font-size: 12px;
+}
+
+.stock-adjustment-current strong {
+  color: #14213d;
+  font-size: 14px;
+}
+
+.stock-adjustment-form {
+  display: grid;
+  gap: 8px;
+  padding: 19px 25px 21px;
+}
+
+.stock-adjustment-form label {
+  margin-top: 5px;
+  color: #263653;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.stock-adjustment-form input,
+.stock-adjustment-form textarea {
+  width: 100%;
+  min-height: 41px;
+  padding: 9px 11px;
+  border: 1px solid #d9e1ee;
+  border-radius: 7px;
+  outline: none;
+  background: #fff;
+  color: #14213d;
+  font: inherit;
+  font-size: 13px;
+}
+
+.stock-adjustment-form textarea {
+  min-height: 74px;
+  resize: vertical;
+}
+
+.stock-adjustment-form input:focus,
+.stock-adjustment-form textarea:focus {
+  border-color: #3974f5;
+  box-shadow: 0 0 0 3px rgba(57, 116, 245, 0.13);
+}
+
+.stock-adjustment-form small {
+  margin-top: -3px;
+  color: #8390a7;
+  font-size: 11px;
+}
+
+.stock-adjustment-submit {
+  min-height: 40px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 7px;
+  background: #2463eb;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.stock-adjustment-submit:hover:not(:disabled) {
+  background: #1b55d3;
+}
+
+.stock-adjustment-submit:disabled,
+.stock-adjustment-close:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.stock-adjustment-error {
+  margin: 5px 0 0;
+  padding: 10px 12px;
+  border: 1px solid #f3c5ca;
+  border-radius: 7px;
+  background: #fff1f2;
+  color: #a52736;
+  font-size: 12px;
+}
+
+.stock-adjustment-history {
+  padding: 17px 25px 22px;
+  border-top: 1px solid #edf0f5;
+}
+
+.stock-adjustment-history h3 {
+  margin: 0 0 11px;
+  color: #14213d;
+  font-size: 13px;
+}
+
+.stock-adjustment-history ul {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stock-adjustment-history li {
+  padding: 11px 0;
+  border-top: 1px solid #f0f2f7;
+}
+
+.stock-adjustment-entry-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.stock-adjustment-entry-heading strong {
+  font-size: 12px;
+}
+
+.stock-adjustment-entry-heading time {
+  color: #8793a8;
+  font-size: 10px;
+}
+
+.stock-adjustment-increase {
+  color: #188452;
+}
+
+.stock-adjustment-decrease {
+  color: #b2303a;
+}
+
+.stock-adjustment-history li p {
+  margin: 5px 0 3px;
+  color: #40506e;
+  font-size: 12px;
+}
+
+.stock-adjustment-history li > span,
+.stock-adjustment-history-empty {
+  color: #8793a8;
+  font-size: 10px;
+}
+
+.stock-adjustment-history-empty {
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .stock-adjustment-header,
+  .stock-adjustment-history {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .stock-adjustment-current {
+    margin-right: 18px;
+    margin-left: 18px;
+  }
+
+  .stock-adjustment-form {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}

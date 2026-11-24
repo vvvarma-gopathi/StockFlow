@@ -6,9 +6,15 @@ interface ProductsTableProps {
   products: Product[];
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
+  onAdjustStock: (product: Product) => void;
 }
 
-function ProductsTable({ products, onEdit, onDelete }: ProductsTableProps) {
+function ProductsTable({
+  products,
+  onEdit,
+  onDelete,
+  onAdjustStock,
+}: ProductsTableProps) {
   if (products.length === 0) {
     return (
       <div className="products-empty">
@@ -63,6 +69,13 @@ function ProductsTable({ products, onEdit, onDelete }: ProductsTableProps) {
               </td>
               <td>
                 <div className="products-row-actions">
+                  <button
+                    type="button"
+                    onClick={() => onAdjustStock(product)}
+                    aria-label={`Adjust stock for ${product.name}`}
+                  >
+                    Adjust stock
+                  </button>
                   <button
                     type="button"
                     onClick={() => onEdit(product)}

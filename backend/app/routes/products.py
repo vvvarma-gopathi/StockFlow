@@ -4,14 +4,23 @@ from sqlalchemy.orm import Session
 from app.dependencies.auth import get_current_user
 from app.dependencies.database import get_db
 from app.models.user import User
-from app.schemas.product import ProductCreate, ProductResponse, ProductUpdate
+from app.schemas.product import (
+    ProductCreate,
+    ProductResponse,
+    ProductUpdate,
+    StockAdjustmentCreate,
+    StockAdjustmentResponse,
+)
 from app.services.product_service import (
     DuplicateSkuError,
+    InsufficientStockError,
     ProductNotFoundError,
+    adjust_stock as adjust_stock_record,
     create_product as create_product_record,
     delete_product as delete_product_record,
     get_product as get_product_record,
     get_products as list_product_records,
+    get_stock_adjustments as list_stock_adjustments,
     update_product as update_product_record,
 )
 
@@ -47,6 +56,59 @@ def list_products(
     current_user: User = Depends(get_current_user),
 ) -> list[ProductResponse]:
     return list_product_records(db, current_user.organization_id)
+
+
+@router.post(
+    "/{product_id}/adjustments",
+    response_model=StockAdjustmentResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def adjust_stock(
+    product_id: int,
+    adjustment_data: StockAdjustmentCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> StockAdjustmentResponse:
+    try:
+        return adjust_stock_record(
+            db,
+            product_id,
+            current_user.organization_id,
+            current_user.id,
+            adjustment_data,
+        )
+    except ProductNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found.",
+        ) from error
+    except InsufficientStockError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="The adjustment cannot reduce stock below zero.",
+        ) from error
+
+
+@router.get(
+    "/{product_id}/adjustments",
+    response_model=list[StockAdjustmentResponse],
+)
+def get_stock_adjustments(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> list[StockAdjustmentResponse]:
+    try:
+        return list_stock_adjustments(
+            db,
+            product_id,
+            current_user.organization_id,
+        )
+    except ProductNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found.",
+        ) from error
 
 
 @router.get("/{product_id}", response_model=ProductResponse)

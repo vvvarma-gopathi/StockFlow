@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductForm from "../components/products/ProductForm";
+import StockAdjustmentDialog from "../components/products/StockAdjustmentDialog";
 import ProductsTable from "../components/products/ProductsTable";
 import { getApiErrorMessage } from "../services/api";
 import {
@@ -8,7 +9,11 @@ import {
   getProducts,
   updateProduct,
 } from "../services/productService";
-import type { Product, ProductInput } from "../services/productService";
+import type {
+  Product,
+  ProductInput,
+  StockAdjustment,
+} from "../services/productService";
 import "./Products.css";
 
 function Products() {
@@ -17,6 +22,9 @@ function Products() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [adjustingProduct, setAdjustingProduct] = useState<Product | null>(
+    null,
+  );
 
   useEffect(() => {
     let active = true;
@@ -96,6 +104,22 @@ function Products() {
     }
   }
 
+  function handleStockAdjusted(adjustment: StockAdjustment) {
+    setProducts((current) =>
+      current.map((product) =>
+        product.id === adjustment.product_id
+          ? {
+              ...product,
+              quantity_on_hand: adjustment.quantity_after,
+              is_low_stock:
+                adjustment.quantity_after <=
+                product.effective_low_stock_threshold,
+            }
+          : product,
+      ),
+    );
+  }
+
   return (
     <section className="products-page">
       <header className="products-page-heading">
@@ -140,6 +164,7 @@ function Products() {
             products={products}
             onEdit={openEditForm}
             onDelete={handleDelete}
+            onAdjustStock={setAdjustingProduct}
           />
         )}
       </section>
@@ -150,6 +175,13 @@ function Products() {
           product={editingProduct}
           onCancel={() => setIsFormOpen(false)}
           onSave={handleSave}
+        />
+      )}
+      {adjustingProduct && (
+        <StockAdjustmentDialog
+          product={adjustingProduct}
+          onClose={() => setAdjustingProduct(null)}
+          onAdjusted={handleStockAdjusted}
         />
       )}
     </section>

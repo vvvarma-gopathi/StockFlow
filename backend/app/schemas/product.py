@@ -72,3 +72,36 @@ class ProductResponse(BaseModel):
     is_low_stock: bool
     created_at: datetime
     updated_at: datetime
+
+
+class StockAdjustmentCreate(BaseModel):
+    quantity_delta: int
+    note: str = Field(min_length=1, max_length=500)
+
+    @field_validator("quantity_delta")
+    @classmethod
+    def reject_zero_delta(cls, value: int) -> int:
+        if value == 0:
+            raise ValueError("Quantity change must not be zero.")
+        return value
+
+    @field_validator("note")
+    @classmethod
+    def normalize_note(cls, value: str) -> str:
+        note = value.strip()
+        if not note:
+            raise ValueError("A note is required.")
+        return note
+
+
+class StockAdjustmentResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    product_id: int
+    adjusted_by_user_id: int | None
+    quantity_delta: int
+    previous_quantity: int
+    quantity_after: int
+    note: str
+    created_at: datetime

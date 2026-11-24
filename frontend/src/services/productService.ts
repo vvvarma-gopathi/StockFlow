@@ -26,6 +26,17 @@ export interface ProductInput {
   low_stock_threshold: number | null;
 }
 
+export interface StockAdjustment {
+  id: number;
+  product_id: number;
+  adjusted_by_user_id: number | null;
+  quantity_delta: number;
+  previous_quantity: number;
+  quantity_after: number;
+  note: string;
+  created_at: string;
+}
+
 export async function getProducts(): Promise<Product[]> {
   const response = await api.get<Product[]>("/products");
   return response.data;
@@ -48,4 +59,25 @@ export async function updateProduct(
 
 export async function deleteProduct(productId: number): Promise<void> {
   await api.delete(`/products/${productId}`);
+}
+
+export async function adjustStock(
+  productId: number,
+  quantityDelta: number,
+  note: string,
+): Promise<StockAdjustment> {
+  const response = await api.post<StockAdjustment>(
+    `/products/${productId}/adjustments`,
+    { quantity_delta: quantityDelta, note },
+  );
+  return response.data;
+}
+
+export async function getStockAdjustments(
+  productId: number,
+): Promise<StockAdjustment[]> {
+  const response = await api.get<StockAdjustment[]>(
+    `/products/${productId}/adjustments`,
+  );
+  return response.data;
 }

@@ -19,6 +19,7 @@ from app.dependencies.database import Base
 
 if TYPE_CHECKING:
     from app.models.organization import Organization
+    from app.models.stock_adjustment import StockAdjustment
 
 
 class Product(Base):
@@ -80,6 +81,10 @@ class Product(Base):
 
     organization: Mapped["Organization"] = relationship(
         back_populates="products"
+    )
+    stock_adjustments: Mapped[list["StockAdjustment"]] = relationship(
+        back_populates="product",
+        cascade="all, delete-orphan",
     )
 
     @property
