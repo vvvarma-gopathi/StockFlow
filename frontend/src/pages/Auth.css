@@ -141,6 +141,12 @@
   font-size: 12px;
 }
 
+.registration-password-error {
+  margin: -11px 0 17px;
+  color: #a52736;
+  font-size: 12px;
+}
+
 .registration-submit {
   min-height: 47px;
   margin-top: 2px;

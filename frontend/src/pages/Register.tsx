@@ -9,13 +9,20 @@ function Register() {
   const [organizationName, setOrganizationName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const passwordMismatch =
+    confirmPassword.length > 0 && password !== confirmPassword;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (password !== confirmPassword) {
+      return;
+    }
+
     setErrorMessage("");
     setSuccessMessage("");
     setIsSubmitting(true);
@@ -114,6 +121,7 @@ function Register() {
               className="password-visibility"
               type="button"
               aria-pressed={showPassword}
+              aria-label={showPassword ? "Hide passwords" : "Show passwords"}
               onClick={() => setShowPassword((visible) => !visible)}
             >
               {showPassword ? "Hide" : "Show"}
@@ -122,6 +130,35 @@ function Register() {
           <p className="registration-hint">
             Use at least 8 characters. Passwords are limited to 72 UTF-8 bytes.
           </p>
+
+          <label htmlFor="confirm-password">Confirm password</label>
+          <div className="registration-password">
+            <input
+              id="confirm-password"
+              name="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder="Re-enter your password"
+              minLength={8}
+              maxLength={72}
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              aria-invalid={passwordMismatch}
+              aria-describedby={
+                passwordMismatch ? "confirm-password-error" : undefined
+              }
+              required
+            />
+          </div>
+          {passwordMismatch && (
+            <p
+              className="registration-password-error"
+              id="confirm-password-error"
+              role="alert"
+            >
+              Passwords do not match.
+            </p>
+          )}
 
           {errorMessage && (
             <p className="registration-message registration-error" role="alert">
