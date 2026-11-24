@@ -1,0 +1,242 @@
+.registration-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 24px;
+  background:
+    radial-gradient(ellipse at 50% 0, rgba(42, 99, 235, 0.09), transparent 42%),
+    #f3f6fc;
+}
+
+.registration-brand {
+  width: min(100%, 440px);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 4px 0 30px;
+  color: #101c39;
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.6px;
+  text-decoration: none;
+}
+
+.registration-brand-mark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #fff;
+  background: #2463eb;
+  box-shadow: 0 5px 12px rgba(36, 99, 235, 0.2);
+}
+
+.registration-brand-mark svg {
+  width: 27px;
+  height: 27px;
+}
+
+.registration-card {
+  width: min(100%, 440px);
+  padding: 36px 38px 30px;
+  border: 1px solid #e0e7f2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 16px 42px rgba(23, 45, 90, 0.08);
+}
+
+.registration-eyebrow {
+  margin-bottom: 9px;
+  color: #2463eb;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 1.15px;
+}
+
+.registration-card h1 {
+  margin: 0;
+  color: #101c39;
+  font-size: clamp(25px, 5vw, 30px);
+  font-weight: 720;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+
+.registration-intro {
+  margin: 10px 0 27px;
+  color: #64728e;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-form label {
+  margin: 0 0 7px;
+  color: #263653;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.registration-form > input,
+.registration-password input {
+  width: 100%;
+  height: 46px;
+  padding: 0 13px;
+  border: 1px solid #d9e1ee;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #14213d;
+  font-size: 14px;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.registration-form > input {
+  margin-bottom: 19px;
+}
+
+.registration-form input::placeholder {
+  color: #9aa6ba;
+}
+
+.registration-form > input:focus,
+.registration-password:focus-within input {
+  border-color: #3974f5;
+  box-shadow: 0 0 0 3px rgba(57, 116, 245, 0.13);
+}
+
+.registration-password {
+  position: relative;
+}
+
+.registration-password input {
+  padding-right: 60px;
+}
+
+.password-visibility {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  padding: 5px 0;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #2463eb;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.registration-hint {
+  margin: 7px 0 20px;
+  color: #8290a8;
+  font-size: 12px;
+}
+
+.registration-submit {
+  min-height: 47px;
+  margin-top: 2px;
+  border: 0;
+  border-radius: 8px;
+  background: #2463eb;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 650;
+  box-shadow: 0 5px 12px rgba(36, 99, 235, 0.18);
+  transition:
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.registration-submit:hover:not(:disabled) {
+  background: #1b55d3;
+  transform: translateY(-1px);
+}
+
+.registration-submit:focus-visible,
+.password-visibility:focus-visible {
+  outline: 3px solid rgba(57, 116, 245, 0.35);
+  outline-offset: 3px;
+}
+
+.registration-submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.registration-message {
+  margin: -4px 0 16px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.registration-error {
+  border: 1px solid #f3c5ca;
+  background: #fff1f2;
+  color: #a52736;
+}
+
+.registration-success {
+  border: 1px solid #bde8d1;
+  background: #effbf4;
+  color: #167443;
+}
+
+.registration-terms {
+  margin: 23px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid #edf0f5;
+  color: #8290a8;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.registration-footer {
+  margin-top: 24px;
+  color: #8a97ac;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .registration-page {
+    padding: 22px 16px;
+  }
+
+  .registration-brand {
+    margin-bottom: 22px;
+  }
+
+  .registration-card {
+    padding: 29px 23px 24px;
+  }
+}
+
+.registration-switch {
+  margin: 20px 0 0;
+  color: #64728e;
+  font-size: 13px;
+  text-align: center;
+}
+
+.registration-switch a {
+  color: #2463eb;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.registration-switch a:hover {
+  text-decoration: underline;
+}

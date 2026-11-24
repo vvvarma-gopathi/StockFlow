@@ -1,12 +1,34 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+from app.dependencies.database import Base, engine
+from app.config import FRONTEND_ORIGINS
+from app.routes.auth import router as auth_router
 
-app=FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    if engine is not None:
+        Base.metadata.create_all(bind=engine)
+    yield
+    if engine is not None:
+        engine.dispose()
+
+app = FastAPI(title="StockFlow API", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=FRONTEND_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth_router, prefix="/api")
 
 @app.get("/")
 def root():
-    return {"APP":"StockFlow MVP"}
+    return {"APP": "StockFlow MVP"}
 
 @app.get("/health")
 def health_check():
-    return {"status":"OK"}
+    return {"status": "OK"}
