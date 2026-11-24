@@ -5,7 +5,7 @@ function ProtectedRoute() {
   return sessionStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" replace />
+    <Navigate to="/" replace />
   );
 }
 

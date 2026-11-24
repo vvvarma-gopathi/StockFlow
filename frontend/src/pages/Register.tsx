@@ -184,7 +184,7 @@ function Register() {
         </form>
 
         <p className="registration-switch">
-          Already have an account? <Link to="/login">Sign in</Link>
+          Already have an account? <Link to="/">Sign in</Link>
         </p>
         <p className="registration-terms">
           Your organization’s inventory is private to your workspace.

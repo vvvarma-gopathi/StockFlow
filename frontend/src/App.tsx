@@ -14,17 +14,13 @@ function App() {
         <Route
           path="/"
           element={
-            <Navigate
-              to={
-                sessionStorage.getItem("stockflow_access_token")
-                  ? "/dashboard"
-                  : "/login"
-              }
-              replace
-            />
+            sessionStorage.getItem("stockflow_access_token") ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Login />
+            )
           }
         />
-        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
