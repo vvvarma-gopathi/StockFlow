@@ -112,8 +112,9 @@ function Products() {
               ...product,
               quantity_on_hand: adjustment.quantity_after,
               is_low_stock:
+                product.effective_low_stock_threshold !== null &&
                 adjustment.quantity_after <=
-                product.effective_low_stock_threshold,
+                  product.effective_low_stock_threshold,
             }
           : product,
       ),

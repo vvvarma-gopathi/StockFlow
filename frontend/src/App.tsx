@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
+import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -178,7 +178,9 @@ function ProductForm({ product, onCancel, onSave }: ProductFormProps) {
                   setLowStockThreshold(event.target.value)
                 }
               />
-              <small>Leave blank to use your organization’s default.</small>
+              <small>
+                Leave blank to use the organization default when enabled.
+              </small>
             </label>
           </div>
 

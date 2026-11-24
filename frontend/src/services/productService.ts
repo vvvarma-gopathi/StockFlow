@@ -10,7 +10,7 @@ export interface Product {
   cost_price: number | string | null;
   selling_price: number | string | null;
   low_stock_threshold: number | null;
-  effective_low_stock_threshold: number;
+  effective_low_stock_threshold: number | null;
   is_low_stock: boolean;
   created_at: string;
   updated_at: string;

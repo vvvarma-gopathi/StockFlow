@@ -68,7 +68,7 @@ class ProductResponse(BaseModel):
     cost_price: Decimal | None
     selling_price: Decimal | None
     low_stock_threshold: int | None
-    effective_low_stock_threshold: int
+    effective_low_stock_threshold: int | None
     is_low_stock: bool
     created_at: datetime
     updated_at: datetime

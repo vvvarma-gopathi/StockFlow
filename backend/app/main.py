@@ -6,6 +6,7 @@ from app.config import FRONTEND_ORIGINS
 from app.routes.auth import router as auth_router
 from app.routes.dashboard import router as dashboard_router
 from app.routes.products import router as products_router
+from app.routes.settings import router as settings_router
 
 
 @asynccontextmanager
@@ -28,6 +29,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api")
 app.include_router(products_router, prefix="/api")
 app.include_router(dashboard_router, prefix="/api")
+app.include_router(settings_router, prefix="/api")
 
 @app.get("/")
 def root():

@@ -6,7 +6,11 @@ function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const pageTitle =
-    location.pathname === "/products" ? "Products" : "Dashboard";
+    location.pathname === "/products"
+      ? "Products"
+      : location.pathname === "/settings"
+        ? "Settings"
+        : "Dashboard";
 
   function handleLogout() {
     logout();
@@ -109,6 +113,48 @@ function AppLayout() {
               </svg>
             </span>
             Products
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `app-nav-link${isActive ? " active" : ""}`
+            }
+            to="/settings"
+          >
+            <span className="app-nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 6h9m4 0h3M4 12h3m4 0h9M4 18h11m4 0h1"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx="15"
+                  cy="6"
+                  r="2"
+                  fill="white"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle
+                  cx="9"
+                  cy="12"
+                  r="2"
+                  fill="white"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+                <circle
+                  cx="17"
+                  cy="18"
+                  r="2"
+                  fill="white"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                />
+              </svg>
+            </span>
+            Settings
           </NavLink>
         </nav>
 

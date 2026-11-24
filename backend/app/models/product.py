@@ -88,11 +88,14 @@ class Product(Base):
     )
 
     @property
-    def effective_low_stock_threshold(self) -> int:
+    def effective_low_stock_threshold(self) -> int | None:
         if self.low_stock_threshold is not None:
             return self.low_stock_threshold
-        return self.organization.default_low_stock_threshold
+        if self.organization.default_low_stock_threshold_enabled:
+            return self.organization.default_low_stock_threshold
+        return None
 
     @property
     def is_low_stock(self) -> bool:
-        return self.quantity_on_hand <= self.effective_low_stock_threshold
+        threshold = self.effective_low_stock_threshold
+        return threshold is not None and self.quantity_on_hand <= threshold
